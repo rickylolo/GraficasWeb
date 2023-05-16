@@ -13,6 +13,44 @@ class BasicCharacterControllerProxy {
   }
 }
 
+class ThirdPersonCamera {
+  constructor(params) {
+    this._params = params
+    this._camera = params.camera
+
+    this._currentPosition = new THREE.Vector3()
+    this._currentLookat = new THREE.Vector3()
+  }
+  _CalculateIdealOffset() {
+    const idealOffset = new THREE.Vector3(-15, 50, -75)
+    idealOffset.applyQuaternion(this._params.target.Rotation)
+    idealOffset.add(this._params.target.Position)
+    return idealOffset
+  }
+
+  _CalculateIdealLookat() {
+    const idealLookat = new THREE.Vector3(0, 10, 10)
+    idealLookat.applyQuaternion(this._params.target.Rotation)
+    idealLookat.add(this._params.target.Position)
+    return idealLookat
+  }
+
+  Update(timeElapsed) {
+    const idealOffset = this._CalculateIdealOffset()
+    const idealLookat = this._CalculateIdealLookat()
+
+    // const t = 0.05;
+    // const t = 4.0 * timeElapsed;
+    const t = 1.0 - Math.pow(0.001, timeElapsed)
+
+    this._currentPosition.lerp(idealOffset, t)
+    this._currentLookat.lerp(idealLookat, t)
+
+    this._camera.position.copy(this._currentPosition)
+    this._camera.lookAt(this._currentLookat)
+  }
+}
+
 class BasicCharacterController {
   constructor(params) {
     this._Init(params)
@@ -20,9 +58,10 @@ class BasicCharacterController {
 
   _Init(params) {
     this._params = params
-    this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0)
+    this._decceleration = new THREE.Vector3(-0.0005, -0.0005, -5.0)
     this._acceleration = new THREE.Vector3(1, 0.25, 50.0)
     this._velocity = new THREE.Vector3(0, 0, 0)
+    this._position = new THREE.Vector3()
 
     this._animations = {}
     this._input = new BasicCharacterControllerInput()
@@ -40,7 +79,6 @@ class BasicCharacterController {
       fbx.scale.setScalar(0.1)
       fbx.scale.set(0.0005, 0.0005, 0.0005)
       fbx.position.set(-5, -0.65, -1.5)
-
       const loaderTexture = new THREE.TextureLoader()
       const textureCharacter = loaderTexture.load(
         '../modelos/low-poly-character/textures/Material.007_Base_Color.png'
@@ -86,9 +124,19 @@ class BasicCharacterController {
       })
     })
   }
+  get Position() {
+    return this._position
+  }
+
+  get Rotation() {
+    if (!this._target) {
+      return new THREE.Quaternion()
+    }
+    return this._target.quaternion
+  }
 
   Update(timeInSeconds) {
-    if (!this._target) {
+    if (!this._stateMachine._currentState) {
       return
     }
 
@@ -115,6 +163,10 @@ class BasicCharacterController {
     const acc = this._acceleration.clone()
     if (this._input._keys.shift) {
       acc.multiplyScalar(2.0)
+    }
+
+    if (this._stateMachine._currentState.Name == 'dance') {
+      acc.multiplyScalar(0.0)
     }
 
     if (this._input._keys.forward) {
@@ -159,7 +211,7 @@ class BasicCharacterController {
     controlObject.position.add(forward)
     controlObject.position.add(sideways)
 
-    oldPosition.copy(controlObject.position)
+    this._position.copy(controlObject.position)
 
     if (this._mixer) {
       this._mixer.update(timeInSeconds)
@@ -454,7 +506,7 @@ class CharacterControllerDemo {
     this._scene = scene
 
     this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
-    this._camera.position.set(0, 10, 20)
+    this._camera.position.set(25, 10, 25)
 
     let light = new THREE.DirectionalLight(0xffffff, 1.0)
     light.position.set(-100, 100, 100)
@@ -1443,25 +1495,25 @@ class CharacterControllerDemo {
       }
     )
 
-    loaderFBX.load(
-      'modelos/polygonal-zombies-with-animations-free-pack/source/zombie_ani_player.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(25, -0.65, 25.5)
+    // loaderFBX.load(
+    //   'modelos/polygonal-zombies-with-animations-free-pack/source/zombie_ani_player.fbx',
+    //   function (object) {
+    //     object.scale.set(0.05, 0.05, 0.05)
+    //     object.position.set(25, -0.65, 25.5)
 
-        const clock = new THREE.Clock()
-        scene.add(object)
+    //     const clock = new THREE.Clock()
+    //     scene.add(object)
 
-        const animation = object.animations[0]
+    //     const animation = object.animations[0]
 
-        // Crear AnimationMixer
-        const mixer = new THREE.AnimationMixer(object)
+    //     // Crear AnimationMixer
+    //     const mixer = new THREE.AnimationMixer(object)
 
-        // Agregar la animación al AnimationMixer
-        const action = mixer.clipAction(animation)
-        action.play()
-      }
-    )
+    //     // Agregar la animación al AnimationMixer
+    //     const action = mixer.clipAction(animation)
+    //     action.play()
+    //   }
+    // )
 
     loaderFBX.load(
       'modelos/urban-lomon-props-low-polystylized-pack-01/source/Proop2.fbx',
@@ -1515,8 +1567,12 @@ class CharacterControllerDemo {
       scene: this._scene,
     }
     this._controls = new BasicCharacterController(params)
-  }
 
+    this._thirdPersonCamera = new ThirdPersonCamera({
+      camera: this._camera,
+      target: this._controls,
+    })
+  }
   _LoadAnimatedModelAndPlay(path, modelFile, animFile, offset) {
     const loader = new FBXLoader()
     loader.setPath(path)
@@ -1568,6 +1624,8 @@ class CharacterControllerDemo {
     if (this._controls) {
       this._controls.Update(timeElapsedS)
     }
+
+    this._thirdPersonCamera.Update(timeElapsedS)
   }
 }
 
