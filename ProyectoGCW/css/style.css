@@ -1,0 +1,137 @@
+body{
+    background: #3B1000;
+    font-family: 'Bebas Neue', cursive, monospace;
+    font-smooth: never;
+    height: 98vh;
+    color:white;
+  
+
+}
+
+smallText{
+    font-family: 'Bebas Neue', cursive, monospace;
+    font-smooth: never;
+    font-size:10px;
+    color:white;
+  
+
+}
+.logo {
+  margin: auto;
+  width: 50%;
+  
+  padding: 10px;
+  text-align: center;
+    font-size: 14vh;
+}
+
+.options {
+  margin: auto;
+  width: 20%;
+  
+  text-align: center;
+}
+
+
+
+#pause, #settings{
+    background-color: #BA3200;
+    font-size: 8vh;
+    width: 20%;
+    text-align: center;
+}
+
+#points{
+
+   background-color: #BA3200;
+    font-size: 8vh;
+    width: 40%;
+    text-align: center;
+
+}
+
+#gameover{
+
+    font-size: 20vh;
+    width: 50%;
+    height: 50%;
+    text-align: center;
+    background-image: url("../img/blood-splatter2.png");
+    background-size: cover;
+    background-position: center;
+
+}
+
+
+
+
+#pauseMenu{
+    
+    background-image: url("/img/example1.jpg");
+
+    
+}
+
+.dashed {
+  --b: 5px;  /* border thickness */
+  --s: 30px; /* size of the dashes */
+  --c1: #BA3200;
+  --c2: #7A2100;
+  
+  width: 250px;
+  aspect-ratio: 1;
+  position: relative;
+}
+.dashed::before {
+  content:"";
+  position: absolute;
+  inset: 0;
+  padding: var(--b);
+  background: 
+    repeating-conic-gradient(var(--c1) 0 25%,var(--c2) 0 50%) 
+    0 0/var(--s) var(--s) round;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+
+#game {
+    position:relative;
+    background-image: url("../img/example2.jpg");
+    height:100vh;
+    width:100%;
+    padding:0;
+}
+
+.corner {
+    position:absolute;
+    
+    margin:0;
+    padding:30px;
+    font-size: 50px;
+}
+.corner:nth-child(1) {
+    border-color:green;
+    top:0;
+    left:0;    
+}
+.corner:nth-child(2) {
+    border-color:red;
+    top:0;
+    right:0;
+}
+.corner:nth-child(3) {
+    border-color:yellow;
+    bottom:0;
+    left:0;
+}
+.corner:nth-child(4) {
+    border-color:pink;
+    bottom:0;
+    right:0;
+}
+
