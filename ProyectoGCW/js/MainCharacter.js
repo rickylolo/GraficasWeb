@@ -676,25 +676,23 @@ class CharacterControllerDemo {
     this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
     this._camera.position.set(25, 10, 25)
 
-    let light = new THREE.DirectionalLight(0xffffff, 1.0)
+    let light = new THREE.DirectionalLight(0xffffff, 0.35)
     light.position.set(-100, 100, 100)
     light.target.position.set(0, 0, 0)
     light.castShadow = true
     light.shadow.bias = -0.001
     light.shadow.mapSize.width = 4096
     light.shadow.mapSize.height = 4096
-    light.shadow.camera.near = 0.1
-    light.shadow.camera.far = 500.0
     light.shadow.camera.near = 0.5
     light.shadow.camera.far = 500.0
-    light.shadow.camera.left = 50
-    light.shadow.camera.right = -50
-    light.shadow.camera.top = 50
-    light.shadow.camera.bottom = -50
+    light.shadow.camera.left = -500
+    light.shadow.camera.right = 500
+    light.shadow.camera.top = 500
+    light.shadow.camera.bottom = -500
     this._scene.add(light)
 
-    light = new THREE.AmbientLight(0x101010)
-    this._scene.add(light)
+    let ambientLight = new THREE.AmbientLight(0x101010)
+    this._scene.add(ambientLight)
 
     const controls = new OrbitControls(this._camera, this._threejs.domElement)
     controls.target.set(0, 10, 0)
@@ -713,1020 +711,544 @@ class CharacterControllerDemo {
     plane.material.onBeforeCompile = ModifyShader_
     this._scene.add(plane)
 
-    this._scene.fog = new THREE.FogExp2(0xdfe9f3, 0.00015)
+    this._scene.fog = new THREE.FogExp2(0xdfe9f3, 0.000175)
 
     this._mixers = []
     this._previousRAF = null
 
-    // -----------------------------------------------------------------------        MODELOS   ----------------------------------------------------------------------------------------------
-    // ------------------ FBX --------------
-    //wall
-    const loaderFBX = new FBXLoader()
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(25, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    // LOAD ------ PAREDES
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      25,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-25, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -25,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-80, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -80,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(80, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      80,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-135, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -135,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(135, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      135,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-190, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -190,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(190, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      190,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-230, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -230,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(200, -0.65, -250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -230,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
-    //wall al frente
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(25, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-25, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-80, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(80, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-135, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(135, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-190, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(190, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-230, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(200, -0.65, 250)
-
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    //wall este
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.2, 0.05, 0.05)
-        object.position.set(250, -0.65, 80)
-        object.rotateY(55)
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(-0.2, 0.05, 0.05)
-        object.position.set(250, -0.65, -80)
-        object.rotateY(55)
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(250, -0.65, -15)
-        object.rotateY(55)
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    //wall oeste
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.2, 0.05, 0.05)
-        object.position.set(-250, -0.65, 80)
-        object.rotateY(55)
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(-0.2, 0.05, 0.05)
-        object.position.set(-250, -0.65, -80)
-        object.rotateY(55)
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-    loaderFBX.load(
-      'modelos/low-poly-brick-wall/source/BrickWall.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-250, -0.65, -15)
-        object.rotateY(55)
-        const loader = new THREE.TextureLoader()
-        const textureBrickWall = loader.load(
-          '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureBrickWall // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      200,
+      -0.65,
+      -250,
+      0.05,
+      0
     )
 
-    //House
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-208, -0.65, -225)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
+    //LOAD ------ PARED FRENTE
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      25,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -25,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -80,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      80,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -135,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      135,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -190,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      190,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -230,
+      -0.65,
+      250,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      200,
+      -0.65,
+      250,
+      0.05,
+      0
     )
 
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(235, -0.65, -225)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
+    //LOAD ------ PARED ESTE
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      250,
+      -0.65,
+      80,
+      0.05,
+      55
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      250,
+      -0.65,
+      -80,
+      0.05,
+      55
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      250,
+      -0.65,
+      -15,
+      0.05,
+      55
     )
 
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(180, -0.65, -225)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
+    //LOAD ------ PARED OESTE
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -250,
+      -0.65,
+      80,
+      0.05,
+      55
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -250,
+      -0.65,
+      -80,
+      0.05,
+      55
+    )
+    this._LoadModel(
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
+      -250,
+      -0.65,
+      -15,
+      0.05,
+      55
     )
 
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-140, -0.65, -225)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
+    //LOAD ------ HOUSE
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -208,
+      -0.65,
+      -225,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      235,
+      -0.65,
+      -225,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      180,
+      -0.65,
+      -225,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -140,
+      -0.65,
+      -225,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -160,
+      -0.65,
+      -125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -40,
+      -0.65,
+      -125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -40,
+      -0.65,
+      -125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      160,
+      -0.65,
+      -125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      40,
+      -0.65,
+      -125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      110,
+      -0.65,
+      -225,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -70,
+      -0.65,
+      -225,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      20,
+      -0.65,
+      -225,
+      0.05,
+      0
     )
 
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-160, -0.65, -125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
+    //LOAD ------ HOUSE AL FRENTE
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -206,
+      -0.65,
+      210,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      242,
+      -0.65,
+      210,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      180,
+      -0.65,
+      210,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -140,
+      -0.65,
+      210,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      110,
+      -0.65,
+      210,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -70,
+      -0.65,
+      210,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      20,
+      -0.65,
+      210,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -160,
+      -0.65,
+      125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      -40,
+      -0.65,
+      125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      160,
+      -0.65,
+      125,
+      0.05,
+      0
+    )
+    this._LoadModel(
+      'modelos/nivelles-house-9-belgium/source/',
+      'nivelles 9.fbx',
+      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      40,
+      -0.65,
+      125,
+      0.05,
+      0
     )
 
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-40, -0.65, -125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
+    // URBAN PROPS
+    this._LoadModel(
+      'modelos/urban-lomon-props-low-polystylized-pack-01/source/',
+      'Proop2.fbx',
+      '/modelos/urban-lomon-props-low-polystylized-pack-01/textures/3.png',
+      -100,
+      -0.65,
+      25.5,
+      0.05,
+      0
     )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(160, -0.65, -125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(40, -0.65, -125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(110, -0.65, -225)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-70, -0.65, -225)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(20, -0.65, -225)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    //House al frente
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-206, -0.65, 210)
-        object.rotateY(0)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(242, -0.65, 210)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(180, -0.65, 210)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-140, -0.65, 210)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(110, -0.65, 210)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-70, -0.65, 210)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(20, -0.65, 210)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-160, -0.65, 125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-40, -0.65, 125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(160, -0.65, 125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/nivelles-house-9-belgium/source/nivelles 9.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(40, -0.65, 125)
-        const animations = object.animations
-        const loader = new THREE.TextureLoader()
-        const textureHouse = loader.load(
-          '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png'
-        )
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureHouse // assign your diffuse texture here
-          }
-        })
-        scene.add(object)
-      }
-    )
-
-    // loaderFBX.load(
-    //   'modelos/polygonal-zombies-with-animations-free-pack/source/zombie_ani_player.fbx',
-    //   function (object) {
-    //     object.scale.set(0.05, 0.05, 0.05)
-    //     object.position.set(25, -0.65, 25.5)
-
-    //     const clock = new THREE.Clock()
-    //     scene.add(object)
-
-    //     const animation = object.animations[0]
-
-    //     // Crear AnimationMixer
-    //     const mixer = new THREE.AnimationMixer(object)
-
-    //     // Agregar la animación al AnimationMixer
-    //     const action = mixer.clipAction(animation)
-    //     action.play()
-    //   }
-    // )
-
-    loaderFBX.load(
-      'modelos/urban-lomon-props-low-polystylized-pack-01/source/Proop2.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-100, -0.65, 25.5)
-
-        const loader = new THREE.TextureLoader()
-        const textureProps = loader.load(
-          '/modelos/urban-lomon-props-low-polystylized-pack-01/textures/3.png'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureProps // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
-    )
-
-    loaderFBX.load(
-      'modelos/zombie-bind-hunter/source/BindHunter.fbx',
-      function (object) {
-        object.scale.set(0.05, 0.05, 0.05)
-        object.position.set(-95, -0.65, 25.5)
-
-        const loader = new THREE.TextureLoader()
-        const textureZombie = loader.load(
-          '/modelos/zombie-bind-hunter/textures/BindHunter_Blind_Hunter_BaseColor.png'
-        )
-
-        object.traverse(function (child) {
-          if (child.isMesh) {
-            child.material.map = textureZombie // assign your diffuse texture here
-          }
-        })
-
-        scene.add(object)
-      }
+    // BIND HUNTER
+    this._LoadModel(
+      'modelos/zombie-bind-hunter/source/',
+      'BindHunter.fbx',
+      '/modelos/zombie-bind-hunter/textures/BindHunter_Blind_Hunter_BaseColor.png',
+      -95,
+      -0.65,
+      25.5,
+      0.05,
+      0
     )
     // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     this._LoadAnimatedModel()
@@ -1745,23 +1267,23 @@ class CharacterControllerDemo {
       target: this._controls,
     })
   }
-  _LoadAnimatedModelAndPlay(path, modelFile, animFile, offset) {
+
+  _LoadModel(path, modelFile, textureFile, posX, posY, posZ, scale, rotY) {
     const loader = new FBXLoader()
     loader.setPath(path)
     loader.load(modelFile, (fbx) => {
-      fbx.scale.setScalar(0.1)
-      fbx.traverse((c) => {
-        c.castShadow = true
-      })
-      fbx.position.copy(offset)
+      fbx.scale.set(scale, scale, scale)
+      fbx.position.set(posX, posY, posZ)
+      fbx.rotateY(rotY)
 
-      const anim = new FBXLoader()
-      anim.setPath(path)
-      anim.load(animFile, (anim) => {
-        const m = new THREE.AnimationMixer(fbx)
-        this._mixers.push(m)
-        const idle = m.clipAction(anim.animations[0])
-        idle.play()
+      const loader = new THREE.TextureLoader()
+      const textureBrickWall = loader.load(textureFile)
+
+      fbx.traverse(function (child) {
+        child.castShadow = true
+        if (child.isMesh) {
+          child.material.map = textureBrickWall // assign your diffuse texture here
+        }
       })
       this._scene.add(fbx)
     })
