@@ -138,7 +138,7 @@ class ThirdPersonCamera {
     this._currentLookat = new THREE.Vector3()
   }
   _CalculateIdealOffset() {
-    const idealOffset = new THREE.Vector3(-15, 50, -75)
+    const idealOffset = new THREE.Vector3(-15, 35, -75)
     idealOffset.applyQuaternion(this._params.target.Rotation)
     idealOffset.add(this._params.target.Position)
     return idealOffset
@@ -1245,6 +1245,9 @@ class CharacterControllerDemo {
       0.05,
       0
     )
+
+    // ZOMBIE
+    this._LoadModel('modelos/zombie/', 'Zombie.fbx', '', 0, 0, 0, 0.05, 0)
     // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     this._LoadAnimatedModel()
     this._RAF()
@@ -1270,6 +1273,14 @@ class CharacterControllerDemo {
       fbx.scale.set(scale, scale, scale)
       fbx.position.set(posX, posY, posZ)
       fbx.rotateY(rotY)
+
+      if (textureFile == '') {
+        fbx.traverse(function (child) {
+          child.castShadow = true
+        })
+        this._scene.add(fbx)
+        return
+      }
 
       const loader = new THREE.TextureLoader()
       const textureBrickWall = loader.load(textureFile)
