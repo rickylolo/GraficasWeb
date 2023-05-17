@@ -1,7 +1,6 @@
 import * as THREE from './three.module.js'
 
 import { FBXLoader } from './FBXLoader.js'
-import { OrbitControls } from './OrbitControls.js'
 const _NOISE_GLSL = `
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
@@ -606,7 +605,7 @@ class CharacterControllerDemo {
       fogDepth *= mix(noiseSample, 1.0, saturate((fogDepth - 5000.0) / 5000.0));
       fogDepth *= fogDepth;
 
-      float heightFactor = 0.05;
+      float heightFactor = 0.075;
       float fogFactor = heightFactor * exp(-fogOrigin.y * fogDensity) * (
           1.0 - exp(-fogDepth * fogDirection.y * fogDensity)) / fogDirection.y;
       fogFactor = saturate(fogFactor);
@@ -693,10 +692,6 @@ class CharacterControllerDemo {
 
     let ambientLight = new THREE.AmbientLight(0x101010)
     this._scene.add(ambientLight)
-
-    const controls = new OrbitControls(this._camera, this._threejs.domElement)
-    controls.target.set(0, 10, 0)
-    controls.update()
 
     const planeGeometry = new THREE.PlaneGeometry(500, 500)
     const planeMaterial = new THREE.MeshStandardMaterial({
