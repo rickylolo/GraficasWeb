@@ -1329,15 +1329,4 @@ class CharacterControllerDemo {
   }
 }
 
-export {
-  State,
-  CharacterFSM,
-  FiniteStateMachine,
-  BasicCharacterControllerInput,
-  BasicCharacterController,
-  BasicCharacterControllerProxy,
-  IdleState,
-  RunState,
-  WalkState,
-  CharacterControllerDemo,
-}
+export { CharacterControllerDemo }
