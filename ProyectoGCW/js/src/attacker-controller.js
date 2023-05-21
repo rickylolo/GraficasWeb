@@ -78,7 +78,7 @@ export const attack_controller = (() => {
           }
 
           const dot = forward.dot(dirToTarget)
-          if (math.in_range(dot, 0.9, 1.1)) {
+          if (math.in_range(dot, 0.01, 1.1)) { // Rango de ataque
             target.Broadcast({
               topic: 'health.damage',
               value: damage,

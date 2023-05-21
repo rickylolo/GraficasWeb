@@ -70,7 +70,7 @@ export const inventory_controller = (() => {
       const obj = this.FindEntity(itemName)
       if (obj) {
         const item = obj.GetComponent('InventoryItem')
-        const path = 'js/resources/icons/weapons/' + item.RenderParams.icon
+        const path = './js/resources/icons/weapons/' + item.RenderParams.icon
         div.style.backgroundImage = "url('" + path + "')"
       } else {
         div.style.backgroundImage = ''

@@ -19,7 +19,7 @@ import { inventory_controller } from './inventory-controller.js'
 import { equip_weapon_component } from './equip-weapon-component.js'
 import { attack_controller } from './attacker-controller.js'
 import { FBXLoader } from './FBXLoader.js'
-/*const _NOISE_GLSL = `
+const _NOISE_GLSL = `
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -136,7 +136,7 @@ float FBM(vec3 p) {
   return value;
 }
 `
-*/
+
 const _VS = `
 varying vec3 vWorldPosition;
 
@@ -161,225 +161,54 @@ void main() {
   gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
 }`;
 
-class BasicCharacterController {
-  constructor(params) {
-    this._Init(params)
-  }
 
-  _Init(params) {
-    this._params = params
-    this._decceleration = new THREE.Vector3(-0.0005, -0.0005, -5.0)
-    this._acceleration = new THREE.Vector3(1, 0.25, 50.0)
-    this._velocity = new THREE.Vector3(0, 0, 0)
-    this._position = new THREE.Vector3()
+THREE.ShaderChunk.fog_fragment = `
+#ifdef USE_FOG
+  vec3 fogOrigin = cameraPosition;
+  vec3 fogDirection = normalize(vWorldPosition - fogOrigin);
+  float fogDepth = distance(vWorldPosition, fogOrigin);
 
-    this._animations = {}
-    this._input = new BasicCharacterControllerInput()
-    this._stateMachine = new CharacterFSM(
-      new BasicCharacterControllerProxy(this._animations)
-    )
+  // f(p) = fbm( p + fbm( p ) )
+  vec3 noiseSampleCoord = vWorldPosition * 0.00025 + vec3(
+      0.0, 0.0, fogTime * 0.025);
+  float noiseSample = FBM(noiseSampleCoord + FBM(noiseSampleCoord)) * 0.5 + 0.5;
+  fogDepth *= mix(noiseSample, 1.0, saturate((fogDepth - 5000.0) / 5000.0));
+  fogDepth *= fogDepth;
 
-    this._LoadModels()
-  }
+  float heightFactor = 0.075;
+  float fogFactor = heightFactor * exp(-fogOrigin.y * fogDensity) * (
+      1.0 - exp(-fogDepth * fogDirection.y * fogDensity)) / fogDirection.y;
+  fogFactor = saturate(fogFactor);
 
-  _LoadModels() {
-    const loader = new FBXLoader()
-    loader.setPath('../modelos/low-poly-character/source/')
-    loader.load('Standing W_Briefcase Idle.fbx', (fbx) => {
-      fbx.scale.setScalar(0.1)
-      fbx.scale.set(0.0005, 0.0005, 0.0005)
-      fbx.position.set(-5, -0.65, -1.5)
-      const loaderTexture = new THREE.TextureLoader()
-      const textureCharacter = loaderTexture.load(
-        '../modelos/low-poly-character/textures/Material.007_Base_Color.png'
-      )
+  gl_FragColor.rgb = mix( gl_FragColor.rgb, fogColor, fogFactor );
+#endif`
 
-      fbx.traverse((c) => {
-        c.castShadow = true
-        if (c.isMesh) {
-          c.material.map = textureCharacter // assign your diffuse texture here
-        }
-      })
+THREE.ShaderChunk.fog_pars_fragment =
+  _NOISE_GLSL +
+  `
+#ifdef USE_FOG
+  uniform float fogTime;
+  uniform vec3 fogColor;
+  varying vec3 vWorldPosition;
+  #ifdef FOG_EXP2
+    uniform float fogDensity;
+  #else
+    uniform float fogNear;
+    uniform float fogFar;
+  #endif
+#endif`
 
-      this._target = fbx
-      this._params.scene.add(this._target)
+THREE.ShaderChunk.fog_vertex = `
+#ifdef USE_FOG
+  vWorldPosition = worldPosition.xyz;
+#endif`
 
-      this._mixer = new THREE.AnimationMixer(this._target)
+THREE.ShaderChunk.fog_pars_vertex = `
+#ifdef USE_FOG
+  varying vec3 vWorldPosition;
+#endif`
 
-      this._manager = new THREE.LoadingManager()
-      this._manager.onLoad = () => {
-        this._stateMachine.SetState('idle')
-      }
 
-      const _OnLoad = (animName, anim) => {
-        const clip = anim.animations[0]
-        const action = this._mixer.clipAction(clip)
-
-        this._animations[animName] = {
-          clip: clip,
-          action: action,
-        }
-      }
-
-      const loader = new FBXLoader(this._manager)
-      loader.setPath('../modelos/low-poly-character/source/')
-      loader.load('Pistol Walk.fbx', (a) => {
-        _OnLoad('walk', a)
-      })
-      loader.load('Pistol Run.fbx', (a) => {
-        _OnLoad('run', a)
-      })
-      loader.load('Pistol Idle.fbx', (a) => {
-        _OnLoad('idle', a)
-      })
-      loader.load('Shooting.fbx', (a) => {
-        _OnLoad('attack', a)
-      })
-    })
-  }
-  get Position() {
-    return this._position
-  }
-
-  get Rotation() {
-    if (!this._target) {
-      return new THREE.Quaternion()
-    }
-    return this._target.quaternion
-  }
-
-  Update(timeInSeconds) {
-    if (!this._stateMachine._currentState) {
-      return
-    }
-
-    this._stateMachine.Update(timeInSeconds, this._input)
-
-    const velocity = this._velocity
-    const frameDecceleration = new THREE.Vector3(
-      velocity.x * this._decceleration.x,
-      velocity.y * this._decceleration.y,
-      velocity.z * this._decceleration.z
-    )
-    frameDecceleration.multiplyScalar(timeInSeconds)
-    frameDecceleration.z =
-      Math.sign(frameDecceleration.z) *
-      Math.min(Math.abs(frameDecceleration.z), Math.abs(velocity.z))
-
-    velocity.add(frameDecceleration)
-
-    const controlObject = this._target
-    const _Q = new THREE.Quaternion()
-    const _A = new THREE.Vector3()
-    const _R = controlObject.quaternion.clone()
-
-    const acc = this._acceleration.clone()
-    if (this._input._keys.shift) {
-      acc.multiplyScalar(2.0)
-    }
-
-    if (this._stateMachine._currentState.Name == 'attack') {
-      acc.multiplyScalar(0.0)
-    }
-
-    if (this._input._keys.forward) {
-      velocity.z += acc.z * timeInSeconds
-    }
-    if (this._input._keys.backward) {
-      velocity.z -= acc.z * timeInSeconds
-    }
-
-    if (this._input._keys.left) {
-      _A.set(0, 1, 0)
-      _Q.setFromAxisAngle(
-        _A,
-        4.0 * Math.PI * timeInSeconds * this._acceleration.y
-      )
-      _R.multiply(_Q)
-    }
-    if (this._input._keys.right) {
-      _A.set(0, 1, 0)
-      _Q.setFromAxisAngle(
-        _A,
-        4.0 * -Math.PI * timeInSeconds * this._acceleration.y
-      )
-      _R.multiply(_Q)
-    }
-
-    controlObject.quaternion.copy(_R)
-
-    const oldPosition = new THREE.Vector3()
-    oldPosition.copy(controlObject.position)
-
-    const forward = new THREE.Vector3(0, 0, 1)
-    forward.applyQuaternion(controlObject.quaternion)
-    forward.normalize()
-
-    const sideways = new THREE.Vector3(1, 0, 0)
-    sideways.applyQuaternion(controlObject.quaternion)
-    sideways.normalize()
-
-    sideways.multiplyScalar(velocity.x * timeInSeconds)
-    forward.multiplyScalar(velocity.z * timeInSeconds)
-
-    controlObject.position.add(forward)
-    controlObject.position.add(sideways)
-
-    this._position.copy(controlObject.position)
-
-    if (this._mixer) {
-      this._mixer.update(timeInSeconds)
-    }
-  }
-}
-
-/*
-    THREE.ShaderChunk.fog_fragment = `
-    #ifdef USE_FOG
-      vec3 fogOrigin = cameraPosition;
-      vec3 fogDirection = normalize(vWorldPosition - fogOrigin);
-      float fogDepth = distance(vWorldPosition, fogOrigin);
-
-      // f(p) = fbm( p + fbm( p ) )
-      vec3 noiseSampleCoord = vWorldPosition * 0.00025 + vec3(
-          0.0, 0.0, fogTime * 0.025);
-      float noiseSample = FBM(noiseSampleCoord + FBM(noiseSampleCoord)) * 0.5 + 0.5;
-      fogDepth *= mix(noiseSample, 1.0, saturate((fogDepth - 5000.0) / 5000.0));
-      fogDepth *= fogDepth;
-
-      float heightFactor = 0.075;
-      float fogFactor = heightFactor * exp(-fogOrigin.y * fogDensity) * (
-          1.0 - exp(-fogDepth * fogDirection.y * fogDensity)) / fogDirection.y;
-      fogFactor = saturate(fogFactor);
-
-      gl_FragColor.rgb = mix( gl_FragColor.rgb, fogColor, fogFactor );
-    #endif`
-
-    THREE.ShaderChunk.fog_pars_fragment =
-      _NOISE_GLSL +
-      `
-    #ifdef USE_FOG
-      uniform float fogTime;
-      uniform vec3 fogColor;
-      varying vec3 vWorldPosition;
-      #ifdef FOG_EXP2
-        uniform float fogDensity;
-      #else
-        uniform float fogNear;
-        uniform float fogFar;
-      #endif
-    #endif`
-
-    THREE.ShaderChunk.fog_vertex = `
-    #ifdef USE_FOG
-      vWorldPosition = worldPosition.xyz;
-    #endif`
-
-    THREE.ShaderChunk.fog_pars_vertex = `
-    #ifdef USE_FOG
-      varying vec3 vWorldPosition;
-    #endif`
-*/
 
 class ZombieGameLevel1 {
   constructor() {
@@ -418,8 +247,8 @@ class ZombieGameLevel1 {
     this._scene.background = new THREE.Color(0xffffff)
     this._scene.fog = new THREE.FogExp2(0x89b2eb, 0.002)
 
-    let light = new THREE.DirectionalLight(0xffffff, 1.0)
-    light.position.set(-10, 500, 10)
+    let light = new THREE.DirectionalLight(0xffffff, 0.3)
+    light.position.set(-10, 1000, 10)
     light.target.position.set(0, 0, 0)
     light.castShadow = true
     light.shadow.bias = -0.001
@@ -438,13 +267,13 @@ class ZombieGameLevel1 {
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(500, 500, 10, 10),
       new THREE.MeshStandardMaterial({
-        color: 'slategrey',
+        color: '0x1e601c',
       })
     )
     plane.castShadow = false
     plane.receiveShadow = true
     plane.rotation.x = -Math.PI / 2
-    //this._scene.add(plane)
+    this._scene.add(plane)
 
     this._entityManager = new entity_manager.EntityManager()
     this._grid = new spatial_hash_grid.SpatialHashGrid(
@@ -500,15 +329,15 @@ class ZombieGameLevel1 {
   }
 
   _LoadSky() {
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xfffffff, 0.6)
-    hemiLight.color.setHSL(0.6, 1, 0.6)
-    hemiLight.groundColor.setHSL(0.095, 1, 0.75)
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xfffffff, 0.3)
+    hemiLight.color.setHex(0x000033)
+    hemiLight.groundColor.setHSL(0.095, 1, 0.15)
     this._scene.add(hemiLight)
 
 
     const uniforms = {
-      "topColor": { value: new THREE.Color(0x0077ff) },
-      "bottomColor": { value: new THREE.Color(0xffffff) },
+      "topColor": { value: new THREE.Color(0x000033) },
+      "bottomColor": { value: new THREE.Color(0x000000) },
       "offset": { value: 33 },
       "exponent": { value: 0.6 }
     };
@@ -516,7 +345,7 @@ class ZombieGameLevel1 {
 
     this._scene.fog.color.copy(uniforms['bottomColor'].value)
 
-    const skyGeo = new THREE.SphereBufferGeometry(500, 32, 15)
+    const skyGeo = new THREE.SphereBufferGeometry(1000, 32, 15)
     const skyMat = new THREE.ShaderMaterial({
       uniforms: uniforms,
       vertexShader: _VS,
@@ -800,7 +629,7 @@ class ZombieGameLevel1 {
     const pos = player._position
 
     this._sun.position.copy(pos)
-    this._sun.position.add(new THREE.Vector3(-10, 500, -10))
+    this._sun.position.add(new THREE.Vector3(-10, 1000, -10))
     this._sun.target.position.copy(pos)
     this._sun.updateMatrixWorld()
     this._sun.target.updateMatrixWorld()
