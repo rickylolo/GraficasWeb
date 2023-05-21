@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118.1/build/three.module.js';
+import * as THREE from './three.module.js';
 
 import { third_person_camera } from './third-person-camera.js'
 import { entity_manager } from './entity-manager.js'
@@ -444,7 +444,7 @@ class ZombieGameLevel1 {
     plane.castShadow = false
     plane.receiveShadow = true
     plane.rotation.x = -Math.PI / 2
-    this._scene.add(plane)
+    //this._scene.add(plane)
 
     this._entityManager = new entity_manager.EntityManager()
     this._grid = new spatial_hash_grid.SpatialHashGrid(
@@ -460,7 +460,7 @@ class ZombieGameLevel1 {
     this._LoadFoliage()
     this._LoadClouds()
     this._LoadSky()
-
+    this._LoadScenario()
     /*
     // URBAN PROPS
     this._LoadModel(
