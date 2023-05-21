@@ -1,4 +1,4 @@
-import * as THREE from './three.module.js'
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118.1/build/three.module.js';
 
 import { third_person_camera } from './third-person-camera.js'
 import { entity_manager } from './entity-manager.js'
@@ -19,7 +19,7 @@ import { inventory_controller } from './inventory-controller.js'
 import { equip_weapon_component } from './equip-weapon-component.js'
 import { attack_controller } from './attacker-controller.js'
 import { FBXLoader } from './FBXLoader.js'
-const _NOISE_GLSL = `
+/*const _NOISE_GLSL = `
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
 //               noise functions.
@@ -136,6 +136,7 @@ float FBM(vec3 p) {
   return value;
 }
 `
+*/
 const _VS = `
 varying vec3 vWorldPosition;
 
@@ -144,7 +145,8 @@ void main() {
   vWorldPosition = worldPosition.xyz;
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-}`
+}`;
+
 
 const _FS = `
 uniform vec3 topColor;
@@ -157,7 +159,7 @@ varying vec3 vWorldPosition;
 void main() {
   float h = normalize( vWorldPosition + offset ).y;
   gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
-}`
+}`;
 
 class BasicCharacterController {
   constructor(params) {
@@ -389,7 +391,6 @@ class ZombieGameLevel1 {
       antialias: true,
     })
     this._threejs.outputEncoding = THREE.sRGBEncoding
-    this._threejs.gammaFactor = 2.2
     this._threejs.shadowMap.enabled = true
     this._threejs.shadowMap.type = THREE.PCFSoftShadowMap
     this._threejs.setPixelRatio(window.devicePixelRatio)
@@ -417,7 +418,7 @@ class ZombieGameLevel1 {
     this._scene.background = new THREE.Color(0xffffff)
     this._scene.fog = new THREE.FogExp2(0x89b2eb, 0.002)
 
-    let light = new THREE.DirectionalLight(0xffffff, 0.35)
+    let light = new THREE.DirectionalLight(0xffffff, 1.0)
     light.position.set(-10, 500, 10)
     light.target.position.set(0, 0, 0)
     light.castShadow = true
@@ -437,7 +438,7 @@ class ZombieGameLevel1 {
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(500, 500, 10, 10),
       new THREE.MeshStandardMaterial({
-        color: 0x1e601c,
+        color: 'slategrey',
       })
     )
     plane.castShadow = false
@@ -487,6 +488,7 @@ class ZombieGameLevel1 {
     // ZOMBIE
     this._LoadModel('modelos/zombie/', 'Zombie.fbx', '', 0, 0, 0, 0.05, 0)*/
     // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     this._previousRAF = null
     this._RAF()
   }
@@ -503,17 +505,18 @@ class ZombieGameLevel1 {
     hemiLight.groundColor.setHSL(0.095, 1, 0.75)
     this._scene.add(hemiLight)
 
+
     const uniforms = {
-      topColor: { value: new THREE.Color(0x0077ff) },
-      bottomColor: { value: new THREE.Color(0xffffff) },
-      offset: { value: 33 },
-      exponent: { value: 0.6 },
-    }
+      "topColor": { value: new THREE.Color(0x0077ff) },
+      "bottomColor": { value: new THREE.Color(0xffffff) },
+      "offset": { value: 33 },
+      "exponent": { value: 0.6 }
+    };
     uniforms['topColor'].value.copy(hemiLight.color)
 
     this._scene.fog.color.copy(uniforms['bottomColor'].value)
 
-    const skyGeo = new THREE.SphereBufferGeometry(1000, 32, 15)
+    const skyGeo = new THREE.SphereBufferGeometry(500, 32, 15)
     const skyMat = new THREE.ShaderMaterial({
       uniforms: uniforms,
       vertexShader: _VS,
@@ -662,7 +665,9 @@ class ZombieGameLevel1 {
     player.AddComponent(new player_input.BasicCharacterControllerInput(params))
     player.AddComponent(new player_entity.BasicCharacterController(params))
     player.AddComponent(
-      new equip_weapon_component.EquipWeapon({ anchor: 'RightHandIndex1' })
+      new equip_weapon_component.EquipWeapon({
+        anchor: 'RightHandIndex1',
+      })
     )
     player.AddComponent(new inventory_controller.InventoryController(params))
     player.AddComponent(
@@ -1347,14 +1352,15 @@ class ZombieGameLevel1 {
   _RAF() {
     requestAnimationFrame((t) => {
       if (this._previousRAF === null) {
-        this._previousRAF = t
+        this._previousRAF = t;
       }
-      this._RAF()
 
-      this._threejs.render(this._scene, this._camera)
-      this._Step(t - this._previousRAF)
-      this._previousRAF = t
-    })
+      this._RAF();
+
+      this._threejs.render(this._scene, this._camera);
+      this._Step(t - this._previousRAF);
+      this._previousRAF = t;
+    });
   }
 
   _Step(timeElapsed) {

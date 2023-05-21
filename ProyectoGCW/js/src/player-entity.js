@@ -66,8 +66,8 @@ export const player_entity = (() => {
 
     _LoadModels() {
       const loader = new FBXLoader()
-      loader.setPath('js/resources/guard/')
-      loader.load('castle_guard_01.fbx', (fbx) => {
+      loader.setPath('js/resources/character/')
+      loader.load('Character.fbx', (fbx) => {
         this._target = fbx
         this._target.scale.setScalar(0.035)
         this._params.scene.add(this._target)
@@ -110,20 +110,20 @@ export const player_entity = (() => {
         }
 
         const loader = new FBXLoader(this._manager)
-        loader.setPath('js/resources/guard/')
-        loader.load('Sword And Shield Idle.fbx', (a) => {
+        loader.setPath('js/resources/character/')
+        loader.load('Idle.fbx', (a) => {
           _OnLoad('idle', a)
         })
-        loader.load('Sword And Shield Run.fbx', (a) => {
+        loader.load('Run.fbx', (a) => {
           _OnLoad('run', a)
         })
-        loader.load('Sword And Shield Walk.fbx', (a) => {
+        loader.load('Walk.fbx', (a) => {
           _OnLoad('walk', a)
         })
-        loader.load('Sword And Shield Slash.fbx', (a) => {
+        loader.load('Attack.fbx', (a) => {
           _OnLoad('attack', a)
         })
-        loader.load('Sword And Shield Death.fbx', (a) => {
+        loader.load('Death.fbx', (a) => {
           _OnLoad('death', a)
         })
       })
