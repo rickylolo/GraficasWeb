@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ES">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="stylesheet" type="text/css" href="base.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+French+Canon+SC&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+
+</head>
+
+<body>
+  <!-- <button id="button-login">Login Google</button>
+  <button id="button-logout">Logout</button> -->
+  <script src="./js/src/main2.js" type="module"></script>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.0/firebase-app.js";
+    import {
+      GoogleAuthProvider,
+      signInWithPopup,
+      getAuth,
+      signOut,
+    } from "https://www.gstatic.com/firebasejs/9.19.0/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      set,
+    } from "https://www.gstatic.com/firebasejs/9.19.0/firebase-database.js";
+
+    /*
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyB-i-B3FuedTBzUg3zOrHoWvkiKdpX6Vnc",
+          authDomain: "gcwproyecto-9df64.firebaseapp.com",
+          databaseURL: "https://gcwproyecto-9df64-default-rtdb.firebaseio.com",
+          projectId: "gcwproyecto-9df64",
+          storageBucket: "gcwproyecto-9df64.appspot.com",
+          messagingSenderId: "286044668722"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const provider = new GoogleAuthProvider();
+        const db = getDatabase();
+        const auth = getAuth();
+        auth.languageCode = "es";
+    
+        //Buttons
+        const buttonLogin = document.getElementById("button-login");
+        const buttonLogout = document.getElementById("button-logout");
+    
+        buttonLogin.addEventListener("click", () => {
+          login();
+        });
+    
+        buttonLogout.addEventListener("click", () => {
+          signOut(auth)
+            .then(() => {
+              // Sign-out successful.
+              console.log("Sign-out successful");
+            })
+            .catch((error) => {
+              // An error happened.
+              console.log("An error happened");
+            });
+        });
+    
+        let currentUser;
+        async function login() {
+          await signInWithPopup(auth, provider)
+            .then((result) => {
+              // This gives you a Google Access Token. You can use it to access the Google API.
+              const credential = GoogleAuthProvider.credentialFromResult(result);
+              const token = credential.accessToken;
+              // The signed-in user info.
+              const user = result.user;
+              currentUser = result.user;
+              writeUserData(user.uid, { x: 0, z: 0 });
+              // IdP data available using getAdditionalUserInfo(result)
+              // ...
+            })
+            .catch((error) => {
+              // Handle Errors here.
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              // The email of the user's account used.
+              const email = error.customData.email;
+              // The AuthCredential type that was used.
+              const credential = GoogleAuthProvider.credentialFromError(error);
+              // ...
+            });
+        }
+    
+        const starCountRef = ref(db, "jugadores/");
+    
+        onValue(starCountRef, (snapshot) => {
+          const data = snapshot.val();
+    
+          Object.entries(data).forEach(([key, value]) => {
+            const jugador = scene.getObjectByName(key);
+            if (!jugador) {
+              const geometry = new THREE.BoxGeometry(1, 1, 1);
+              const material = new THREE.MeshPhongMaterial();
+              const mesh = new THREE.Mesh(geometry, material);
+              mesh.castShadow = true;
+              mesh.position.set(value.x, 0, value.z);
+              mesh.name = key;
+              mesh.material.color = new THREE.Color(Math.random() * 0xffffff);
+              scene.add(mesh);
+            }
+            scene.getObjectByName(key).position.x = value.x;
+            scene.getObjectByName(key).position.z = value.z;
+          });
+        });
+    
+        function writeUserData(userId, position) {
+          set(ref(db, "jugadores/" + userId), {
+            x: position.x,
+            z: position.z,
+          });
+        }
+    
+    */
+  </script>
+  <div class="container" id="container">
+    <div class="ui">
+      <div class="quest-journal-layout">
+        <div class="quest-journal" id="quest-journal">
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="quest-ui-layout">
+        <div class="quest-ui" id="quest-ui">
+          <div class="quest-text-title" id="quest-text-title"></div>
+          <div class="quest-text" id="quest-text"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="icon-ui">
+        <div class="icon-bar" id="icon-bar">
+          <div class="icon-bar-item" id="icon-bar-stats"
+            style="background-image: url('js/resources/icons/ui/skills.png');"></div>
+          <div class="icon-bar-item" id="icon-bar-inventory"
+            style="background-image: url('js/resources/icons/ui/backpack.png');"></div>
+          <div class="icon-bar-item" id="icon-bar-quests"
+            style="background-image: url('js/resources/icons/ui/tied-scroll.png');"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="stats" id="stats">
+        <div class="stats-inner">
+          <div class="stats-title">Statistics</div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Strength
+              <div class="stats-tooltiptext">How strong you are, affects how much damage you do. So blah blah if you're
+                doing stuff then its stronger or whatever, the damage is up. This is text to show the tooltip.</div>
+            </div>
+            <div id="stats-strength">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Wisdomness
+              <div class="stats-tooltiptext">Wisdom is the guage of something to do with wisdom in the game because
+                wisdom
+                is important and wisdom is wise to wisdoming.</div>
+            </div>
+            <div id="stats-wisdomness">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Benchpress
+              <div class="stats-tooltiptext">Gotta have a good bench to be a warrior or something.</div>
+            </div>
+            <div id="stats-benchpress">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">Curl
+              <div class="stats-tooltiptext">The ultimate expression of strength, this affects literally everything in
+                your life.</div>
+            </div>
+            <div id="stats-curl">0</div>
+          </div>
+          <div class="stats-row">
+            <div class="stats-tooltip">XP
+              <div class="stats-tooltiptext">How much xp you've accumulated by killing things for xp. Get enough and
+                you'll gain a level or something.</div>
+            </div>
+            <div id="stats-experience">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="health-ui">
+        <div class="health-bar" id="health-bar"></div>
+      </div>
+    </div>
+    <div class="ui">
+      <div class="inventory" id="inventory">
+        <div class="inventory-inner">
+          <div class="inventory-title">Inventory</div>
+          <div class="inventory-row">
+            <div class="inventory-column">
+              <div class="inventory-item" id="inventory-equip-1" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-2" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-3" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-4" draggable="true"></div>
+            </div>
+            <div class="inventory-character"></div>
+            <div class="inventory-column">
+              <div class="inventory-item" id="inventory-equip-5" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-6" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-7" draggable="true"></div>
+              <div class="inventory-item" id="inventory-equip-8" draggable="true"></div>
+            </div>
+          </div>
+          <div class="inventory-row">
+            <div class="inventory-item" id="inventory-1" draggable="true"></div>
+            <div class="inventory-item" id="inventory-2" draggable="true"></div>
+            <div class="inventory-item" id="inventory-3" draggable="true"></div>
+            <div class="inventory-item" id="inventory-4" draggable="true"></div>
+            <div class="inventory-item" id="inventory-5" draggable="true"></div>
+            <div class="inventory-item" id="inventory-6" draggable="true"></div>
+            <div class="inventory-item" id="inventory-7" draggable="true"></div>
+            <div class="inventory-item" id="inventory-8" draggable="true"></div>
+          </div>
+          <div class="inventory-row">
+            <div class="inventory-item" id="inventory-9" draggable="true"></div>
+            <div class="inventory-item" id="inventory-10" draggable="true"></div>
+            <div class="inventory-item" id="inventory-11" draggable="true"></div>
+            <div class="inventory-item" id="inventory-12" draggable="true"></div>
+            <div class="inventory-item" id="inventory-13" draggable="true"></div>
+            <div class="inventory-item" id="inventory-14" draggable="true"></div>
+            <div class="inventory-item" id="inventory-15" draggable="true"></div>
+            <div class="inventory-item" id="inventory-16" draggable="true"></div>
+          </div>
+          <div class="inventory-row">
+            <div class="inventory-item" id="inventory-17" draggable="true"></div>
+            <div class="inventory-item" id="inventory-18" draggable="true"></div>
+            <div class="inventory-item" id="inventory-19" draggable="true"></div>
+            <div class="inventory-item" id="inventory-20" draggable="true"></div>
+            <div class="inventory-item" id="inventory-21" draggable="true"></div>
+            <div class="inventory-item" id="inventory-22" draggable="true"></div>
+            <div class="inventory-item" id="inventory-23" draggable="true"></div>
+            <div class="inventory-item" id="inventory-24" draggable="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
