@@ -60,7 +60,7 @@ export const equip_weapon_component = (() => {
 
     _LoadModels(item, cb) {
       const loader = new FBXLoader()
-      loader.setPath('./js/resources/weapons/FBX/')
+      loader.setPath('js/resources/weapons/FBX/')
       loader.load(item.RenderParams.name + '.fbx', (fbx) => {
         this._target = fbx
         //this._target.scale.setScalar(item.RenderParams.scale)

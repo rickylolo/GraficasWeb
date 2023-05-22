@@ -85,28 +85,19 @@ export const npc_entity = (() => {
 
     _LoadModels() {
       const loader = new FBXLoader()
-      loader.setPath('js/resources/monsters/FBX/')
+      loader.setPath('js/resources/zombie/')
       loader.load(this._params.resourceName, (glb) => {
         this._target = glb
         this._params.scene.add(this._target)
 
-        this._target.scale.setScalar(0.025)
+        this._target.scale.setScalar(0.04)
         this._target.position.copy(this._parent._position)
         this._target.position.y += 0.35
-        const texLoader = new THREE.TextureLoader()
-        const texture = texLoader.load(
-          'js/resources/monsters/Textures/' + this._params.resourceTexture
-        )
-        texture.encoding = THREE.sRGBEncoding
-        texture.flipY = true
+
 
         this._target.traverse((c) => {
           c.castShadow = true
           c.receiveShadow = true
-          if (c.material) {
-            c.material.map = texture
-            c.material.side = THREE.DoubleSide
-          }
         })
 
         this._mixer = new THREE.AnimationMixer(this._target)
@@ -129,7 +120,7 @@ export const npc_entity = (() => {
         this._animations['idle'] = _FindAnim('Idle')
         this._animations['walk'] = _FindAnim('Walk')
         this._animations['death'] = _FindAnim('Death')
-        this._animations['attack'] = _FindAnim('Bite_Front')
+        this._animations['attack'] = _FindAnim('Attack')
 
         this._stateMachine.SetState('idle')
       })

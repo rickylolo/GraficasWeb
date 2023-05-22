@@ -384,7 +384,7 @@ class ZombieGameLevel1 {
   }
 
   _LoadFoliage() {
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 100; ++i) { // Cantidad ade Arboles
       const names = [
         'CommonTree_Dead',
         'CommonTree',
@@ -396,12 +396,18 @@ class ZombieGameLevel1 {
       ]
       const name = names[math.rand_int(0, names.length - 1)]
       const index = math.rand_int(1, 5)
+      const halfSize = 250; // Mitad del tamaño del cuadrado (500 / 2)
+      const padding = 100; // Espacio adicional fuera del cuadrado
 
-      const pos = new THREE.Vector3(
-        (Math.random() * 2.0 - 1.0) * 500,
-        0,
-        (Math.random() * 2.0 - 1.0) * 500
-      )
+      const posX = (Math.random() > 0.5) ? 
+      Math.random() * (halfSize + padding) + halfSize : 
+      -Math.random() * (halfSize + padding) - halfSize;
+  
+       const posZ = (Math.random() > 0.5) ? 
+       Math.random() * (halfSize + padding) + halfSize : 
+       -Math.random() * (halfSize + padding) - halfSize;
+
+      const pos = new THREE.Vector3(posX, 0, posZ);
 
       const e = new entity.Entity()
       e.AddComponent(
@@ -545,32 +551,11 @@ class ZombieGameLevel1 {
     )
     this._entityManager.Add(camera, 'player-camera')
 
-    for (let i = 0; i < 50; ++i) {
+    for (let i = 0; i < 100; ++i) {
       const monsters = [
         {
-          resourceName: 'Ghost.fbx',
-          resourceTexture: 'Ghost_Texture.png',
-        },
-        {
-          resourceName: 'Alien.fbx',
-          resourceTexture: 'Alien_Texture.png',
-        },
-        {
-          resourceName: 'Skull.fbx',
-          resourceTexture: 'Skull_Texture.png',
-        },
-        {
-          resourceName: 'GreenDemon.fbx',
-          resourceTexture: 'GreenDemon_Texture.png',
-        },
-        {
-          resourceName: 'Cyclops.fbx',
-          resourceTexture: 'Cyclops_Texture.png',
-        },
-        {
-          resourceName: 'Cactus.fbx',
-          resourceTexture: 'Cactus_Texture.png',
-        },
+          resourceName: 'Zombie.fbx'
+        }
       ]
       const m = monsters[math.rand_int(0, monsters.length - 1)]
 
@@ -580,7 +565,6 @@ class ZombieGameLevel1 {
           camera: this._camera,
           scene: this._scene,
           resourceName: m.resourceName,
-          resourceTexture: m.resourceTexture,
         })
       )
       npc.AddComponent(

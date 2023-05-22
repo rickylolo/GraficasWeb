@@ -545,32 +545,11 @@ class ZombieGameLevel1 {
     )
     this._entityManager.Add(camera, 'player-camera')
 
-    for (let i = 0; i < 50; ++i) {
+    for (let i = 0; i < 100; ++i) {
       const monsters = [
         {
-          resourceName: 'Ghost.fbx',
-          resourceTexture: 'Ghost_Texture.png',
-        },
-        {
-          resourceName: 'Alien.fbx',
-          resourceTexture: 'Alien_Texture.png',
-        },
-        {
-          resourceName: 'Skull.fbx',
-          resourceTexture: 'Skull_Texture.png',
-        },
-        {
-          resourceName: 'GreenDemon.fbx',
-          resourceTexture: 'GreenDemon_Texture.png',
-        },
-        {
-          resourceName: 'Cyclops.fbx',
-          resourceTexture: 'Cyclops_Texture.png',
-        },
-        {
-          resourceName: 'Cactus.fbx',
-          resourceTexture: 'Cactus_Texture.png',
-        },
+          resourceName: 'Zombie.fbx'
+        }
       ]
       const m = monsters[math.rand_int(0, monsters.length - 1)]
 
@@ -580,7 +559,6 @@ class ZombieGameLevel1 {
           camera: this._camera,
           scene: this._scene,
           resourceName: m.resourceName,
-          resourceTexture: m.resourceTexture,
         })
       )
       npc.AddComponent(
