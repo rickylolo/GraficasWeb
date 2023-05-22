@@ -245,9 +245,9 @@ class ZombieGameLevel1 {
 
     this._scene = new THREE.Scene()
     this._scene.background = new THREE.Color(0xffffff)
-    this._scene.fog = new THREE.FogExp2(0x89b2eb, 0.01)
+    this._scene.fog = new THREE.FogExp2(0x89b2eb, 0.002)
 
-    let light = new THREE.DirectionalLight(0xffffff, 0.2)
+    let light = new THREE.DirectionalLight(0xffffff, 0.3)
     light.position.set(-10, 1000, 10)
     light.target.position.set(0, 0, 0)
     light.castShadow = true
@@ -330,7 +330,7 @@ class ZombieGameLevel1 {
   _LoadSky() {
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xfffffff, 0.3)
     hemiLight.color.setHex(0x000033)
-    hemiLight.groundColor.setHSL(0.095, 0.1, 0.15)
+    hemiLight.groundColor.setHSL(0.095, 1, 0.15)
     this._scene.add(hemiLight)
 
 
@@ -383,7 +383,7 @@ class ZombieGameLevel1 {
   }
 
   _LoadFoliage() {
-    for (let i = 0; i < 150; ++i) {
+    for (let i = 0; i < 100; ++i) { // Cantidad ade Arboles
       const names = [
         'CommonTree_Dead',
         'CommonTree',
@@ -395,15 +395,18 @@ class ZombieGameLevel1 {
       ]
       const name = names[math.rand_int(0, names.length - 1)]
       const index = math.rand_int(1, 5)
-
-
       const halfSize = 250; // Mitad del tamaño del cuadrado (500 / 2)
-      const pos = new THREE.Vector3(
-        (Math.random() * halfSize * 2 - halfSize),
-        0,
-        (Math.random() * halfSize * 2 - halfSize)
-      );
+      const padding = 100; // Espacio adicional fuera del cuadrado
 
+      const posX = (Math.random() > 0.5) ? 
+      Math.random() * (halfSize + padding) + halfSize : 
+      -Math.random() * (halfSize + padding) - halfSize;
+  
+       const posZ = (Math.random() > 0.5) ? 
+       Math.random() * (halfSize + padding) + halfSize : 
+       -Math.random() * (halfSize + padding) - halfSize;
+
+      const pos = new THREE.Vector3(posX, 0, posZ);
 
       const e = new entity.Entity()
       e.AddComponent(
@@ -547,32 +550,11 @@ class ZombieGameLevel1 {
     )
     this._entityManager.Add(camera, 'player-camera')
 
-    for (let i = 0; i < 50; ++i) {
+    for (let i = 0; i < 20; ++i) {
       const monsters = [
         {
-          resourceName: 'Ghost.fbx',
-          resourceTexture: 'Ghost_Texture.png',
-        },
-        {
-          resourceName: 'Alien.fbx',
-          resourceTexture: 'Alien_Texture.png',
-        },
-        {
-          resourceName: 'Skull.fbx',
-          resourceTexture: 'Skull_Texture.png',
-        },
-        {
-          resourceName: 'GreenDemon.fbx',
-          resourceTexture: 'GreenDemon_Texture.png',
-        },
-        {
-          resourceName: 'Cyclops.fbx',
-          resourceTexture: 'Cyclops_Texture.png',
-        },
-        {
-          resourceName: 'Cactus.fbx',
-          resourceTexture: 'Cactus_Texture.png',
-        },
+          resourceName: 'Zombie.fbx'
+        }
       ]
       const m = monsters[math.rand_int(0, monsters.length - 1)]
 
@@ -638,6 +620,35 @@ class ZombieGameLevel1 {
   }
 
 
+  _LoadModel(path, modelFile, textureFile, posX, posY, posZ, scale, rotY) {
+    const loader = new FBXLoader()
+    loader.setPath(path)
+    loader.load(modelFile, (fbx) => {
+      fbx.scale.set(scale, scale, scale)
+      fbx.position.set(posX, posY, posZ)
+      fbx.rotateY(rotY)
+
+      if (textureFile == '') {
+        fbx.traverse(function (child) {
+          child.castShadow = true
+        })
+        this._scene.add(fbx)
+        return
+      }
+
+      const loader = new THREE.TextureLoader()
+      const textureBrickWall = loader.load(textureFile)
+
+      fbx.traverse(function (child) {
+        child.castShadow = true
+        if (child.isMesh) {
+          child.material.map = textureBrickWall // assign your diffuse texture here
+        }
+      })
+      this._scene.add(fbx)
+    })
+  }
+
   _RAF() {
     requestAnimationFrame((t) => {
       if (this._previousRAF === null) {
@@ -661,8 +672,49 @@ class ZombieGameLevel1 {
   }
 }
 
+
+
 let _APP = null
+let isPausado = false
 
 window.addEventListener('DOMContentLoaded', () => {
+
+
+  var buttonPause = document.getElementById('icon-bar-pause');
+  var buttonVolver = document.getElementById('volverJuego');
+
+  var pausa = document.getElementById('pauseMenu');
+  var juego = document.getElementById('container');
+
+  
+
+  buttonPause.addEventListener('click', function() {
+    isPausado = !isPausado
+
+    if(!isPausado){
+      pausa.style.display  = 'none';
+      juego.style.display  = 'block';
+    }
+    else{
+      pausa.style.display  = 'block';
+      juego.style.display  = 'none';
+    }
+  })
+
+  
+  buttonVolver.addEventListener('click', function() {
+    isPausado = !isPausado
+
+
+    if(!isPausado){
+      pausa.style.display  = 'none';
+      juego.style.display  = 'block';
+    }
+    else{
+      pausa.style.display  = 'block';
+      juego.style.display  = 'none';
+    }
+  })
+  pausa.style.display  = 'none';
   _APP = new ZombieGameLevel1()
 })

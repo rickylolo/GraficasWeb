@@ -384,7 +384,7 @@ class ZombieGameLevel1 {
   }
 
   _LoadFoliage() {
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 100; ++i) { // Cantidad ade Arboles
       const names = [
         'CommonTree_Dead',
         'CommonTree',
@@ -396,12 +396,18 @@ class ZombieGameLevel1 {
       ]
       const name = names[math.rand_int(0, names.length - 1)]
       const index = math.rand_int(1, 5)
+      const halfSize = 250; // Mitad del tamaño del cuadrado (500 / 2)
+      const padding = 100; // Espacio adicional fuera del cuadrado
 
-      const pos = new THREE.Vector3(
-        (Math.random() * 2.0 - 1.0) * 500,
-        0,
-        (Math.random() * 2.0 - 1.0) * 500
-      )
+      const posX = (Math.random() > 0.5) ? 
+      Math.random() * (halfSize + padding) + halfSize : 
+      -Math.random() * (halfSize + padding) - halfSize;
+  
+       const posZ = (Math.random() > 0.5) ? 
+       Math.random() * (halfSize + padding) + halfSize : 
+       -Math.random() * (halfSize + padding) - halfSize;
+
+      const pos = new THREE.Vector3(posX, 0, posZ);
 
       const e = new entity.Entity()
       e.AddComponent(
@@ -545,7 +551,7 @@ class ZombieGameLevel1 {
     )
     this._entityManager.Add(camera, 'player-camera')
 
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 20; ++i) {
       const monsters = [
         {
           resourceName: 'Zombie.fbx'
@@ -894,9 +900,9 @@ class ZombieGameLevel1 {
 
     //LOAD ------ HOUSE
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       -208,
       -0.65,
       -225,
@@ -904,9 +910,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       235,
       -0.65,
       -225,
@@ -914,9 +920,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       180,
       -0.65,
       -225,
@@ -924,9 +930,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       -140,
       -0.65,
       -225,
@@ -934,9 +940,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       -160,
       -0.65,
       -125,
@@ -954,9 +960,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       -40,
       -0.65,
       -125,
@@ -984,9 +990,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       110,
       -0.65,
       -225,
@@ -1004,9 +1010,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       20,
       -0.65,
       -225,
@@ -1016,9 +1022,9 @@ class ZombieGameLevel1 {
 
     //LOAD ------ HOUSE AL FRENTE
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       -206,
       -0.65,
       210,
@@ -1036,9 +1042,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       180,
       -0.65,
       210,
@@ -1046,9 +1052,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       -140,
       -0.65,
       210,
@@ -1056,9 +1062,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       110,
       -0.65,
       210,
@@ -1076,9 +1082,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       20,
       -0.65,
       210,
@@ -1096,9 +1102,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       -40,
       -0.65,
       125,
@@ -1116,9 +1122,9 @@ class ZombieGameLevel1 {
       0
     )
     this._LoadModel(
-      'modelos/nivelles-house-9-belgium/source/',
-      'nivelles 9.fbx',
-      '/modelos/nivelles-house-9-belgium/textures/nivelles_9_d.png',
+      '/modelos/low-poly-brick-wall/source/',
+      'BrickWall.fbx',
+      '/modelos/low-poly-brick-wall/textures/internal_ground_ao_texture.jpeg',
       40,
       -0.65,
       125,
@@ -1179,8 +1185,49 @@ class ZombieGameLevel1 {
   }
 }
 
+
+
 let _APP = null
+let isPausado = false
 
 window.addEventListener('DOMContentLoaded', () => {
+
+
+  var buttonPause = document.getElementById('icon-bar-pause');
+  var buttonVolver = document.getElementById('volverJuego');
+
+  var pausa = document.getElementById('pauseMenu');
+  var juego = document.getElementById('container');
+
+  
+
+  buttonPause.addEventListener('click', function() {
+    isPausado = !isPausado
+
+    if(!isPausado){
+      pausa.style.display  = 'none';
+      juego.style.display  = 'block';
+    }
+    else{
+      pausa.style.display  = 'block';
+      juego.style.display  = 'none';
+    }
+  })
+
+  
+  buttonVolver.addEventListener('click', function() {
+    isPausado = !isPausado
+
+
+    if(!isPausado){
+      pausa.style.display  = 'none';
+      juego.style.display  = 'block';
+    }
+    else{
+      pausa.style.display  = 'block';
+      juego.style.display  = 'none';
+    }
+  })
+  pausa.style.display  = 'none';
   _APP = new ZombieGameLevel1()
 })

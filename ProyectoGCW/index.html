@@ -20,6 +20,11 @@
 </head>
 
 <body>
+  <script>
+    function redirectToInicio() {
+        window.location.href = "inicio.html";
+    }
+</script>
   <!-- <button id="button-login">Login Google</button>
   <button id="button-logout">Logout</button> -->
   <script src="./js/src/main.js" type="module"></script>
@@ -274,9 +279,7 @@
       
     </div>
       <div class="">
-          <button class="btn btn-lg btn-danger" id="volverJuego">VOLVER</button>
-          
-  
+          <button class="btn btn-lg btn-danger" id="volverJuego" onclick="redirectToInicio()">VOLVER</button>
   
         </div>
   </div>
