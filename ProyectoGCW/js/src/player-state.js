@@ -60,11 +60,13 @@ export const player_state = (() => {
     }
 
     Enter(prevState) {
+      _ShootSound()
       this._action = this._parent._proxy._animations['attack'].action
       const mixer = this._action.getMixer()
       mixer.addEventListener('finished', this._FinishedCallback)
-
+  
       if (prevState) {
+    
         const prevAction =
           this._parent._proxy._animations[prevState.Name].action
 
@@ -73,6 +75,7 @@ export const player_state = (() => {
         this._action.clampWhenFinished = true
         this._action.crossFadeFrom(prevAction, 0.2, true)
         this._action.play()
+      
       } else {
         this._action.play()
       }
@@ -95,9 +98,20 @@ export const player_state = (() => {
       this._Cleanup()
     }
 
+
     Update(_) {}
   }
 
+  function _ShootSound(){
+    let _listener = new THREE.AudioListener();
+    const sound = new THREE.Audio(_listener);
+    const loader = new THREE.AudioLoader()
+    loader.load('js/resources/sounds/gunshot.mp3', (buffer) => {
+      sound.setBuffer(buffer);
+      sound.setVolume(0.2);
+      sound.play()
+    })
+  }
   class WalkState extends State {
     constructor(parent) {
       super(parent)

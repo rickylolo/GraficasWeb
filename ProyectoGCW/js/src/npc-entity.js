@@ -7,6 +7,7 @@ import { entity } from './entity.js'
 import { player_entity } from './player-entity.js'
 import { player_state } from './player-state.js'
 
+
 export const npc_entity = (() => {
   class AIInput {
     constructor() {
@@ -52,6 +53,7 @@ export const npc_entity = (() => {
       this._acceleration = new THREE.Vector3(1, 0.25, 40.0)
       this._velocity = new THREE.Vector3(0, 0, 0)
       this._position = new THREE.Vector3()
+
 
       this._animations = {}
       this._input = new AIInput()
@@ -117,6 +119,18 @@ export const npc_entity = (() => {
           return null
         }
 
+      
+        const sound = new THREE.PositionalAudio(this._params.camera._listener);
+        const loaderSound = new THREE.AudioLoader()
+        loaderSound.load('js/resources/sounds/zombieSound.mp3', (buffer) => {
+          sound.setBuffer(buffer);
+          sound.setVolume(1);
+          sound.setLoop(true);
+          sound.setRefDistance(1)
+          sound.play()
+        })
+
+        fbx.add( sound );
         this._animations['idle'] = _FindAnim('Idle')
         this._animations['walk'] = _FindAnim('Walk')
         this._animations['death'] = _FindAnim('Death')

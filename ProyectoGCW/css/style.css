@@ -50,7 +50,7 @@ smallText{
 
 }
 
-#gameover{
+#contenedorGameOver{
 
     font-size: 20vh;
     width: 50%;
@@ -65,10 +65,11 @@ smallText{
 
 
 
-#pauseMenu{
+.pauseMenu{
     
-    background-image: url("/img/example1.jpg");
-
+    background-image: url("../img/example1.jpg");
+    height:100vh;
+    width:100%;
     
 }
 

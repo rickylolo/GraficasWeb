@@ -8,7 +8,7 @@ body {
   overscroll-behavior: none;
 }
 
-.container {
+.container-GAME {
   width: 100%;
   height: 100%;
   position: relative;

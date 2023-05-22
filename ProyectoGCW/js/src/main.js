@@ -247,7 +247,7 @@ class ZombieGameLevel1 {
     this._scene.background = new THREE.Color(0xffffff)
     this._scene.fog = new THREE.FogExp2(0x89b2eb, 0.002)
 
-    let light = new THREE.DirectionalLight(0xffffff, 0.3)
+    let light = new THREE.DirectionalLight(0xffffff, 0.15)
     light.position.set(-10, 1000, 10)
     light.target.position.set(0, 0, 0)
     light.castShadow = true
@@ -290,6 +290,8 @@ class ZombieGameLevel1 {
     this._LoadClouds()
     this._LoadSky()
     this._LoadScenario()
+
+    this._LoadEnvironmentSound()
     /*
     // URBAN PROPS
     this._LoadModel(
@@ -313,13 +315,12 @@ class ZombieGameLevel1 {
       0.05,
       0
     )
-
-    // ZOMBIE
-    this._LoadModel('modelos/zombie/', 'Zombie.fbx', '', 0, 0, 0, 0.05, 0)*/
+*/
     // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
     this._previousRAF = null
     this._RAF()
+
+    
   }
 
   _LoadControllers() {
@@ -328,6 +329,19 @@ class ZombieGameLevel1 {
     this._entityManager.Add(ui, 'ui')
   }
 
+  _LoadEnvironmentSound(){
+    this._listener = new THREE.AudioListener();
+    this._camera.add(this._listener);
+    const sound = new THREE.Audio(this._listener);
+    const loader = new THREE.AudioLoader()
+    loader.load('js/resources/sounds/nature015.mp3', (buffer) => {
+      sound.setBuffer(buffer);
+      sound.setLoop(true);
+      sound.setVolume(0.2);
+      sound.play()
+    })
+  }
+  
   _LoadSky() {
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0xfffffff, 0.3)
     hemiLight.color.setHex(0x000033)
@@ -551,7 +565,7 @@ class ZombieGameLevel1 {
     )
     this._entityManager.Add(camera, 'player-camera')
 
-    for (let i = 0; i < 20; ++i) {
+    for (let i = 0; i < 30; ++i) {
       const monsters = [
         {
           resourceName: 'Zombie.fbx'
@@ -1183,6 +1197,8 @@ class ZombieGameLevel1 {
 
     this._entityManager.Update(timeElapsedS)
   }
+
+
 }
 
 
@@ -1195,11 +1211,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   var buttonPause = document.getElementById('icon-bar-pause');
   var buttonVolver = document.getElementById('volverJuego');
+  var buttonInicio = document.getElementById('regresarInicio');
+  var buttonConfiguracion = document.getElementById('verConfiguracion');volverPausaFromConfiguracion
 
   var pausa = document.getElementById('pauseMenu');
   var juego = document.getElementById('container');
+  var gameover = document.getElementById('GameOver');
+  var configuracion = document.getElementById('Configuracion');
 
   
+  
+  buttonInicio.addEventListener('click', function() {
+    window.location.href = "inicio.html";
+})
+
+buttonConfiguracion.addEventListener('click', function() {
+  pausa.style.display  = 'none';
+  configuracion.style.display  = 'block';
+})
+
 
   buttonPause.addEventListener('click', function() {
     isPausado = !isPausado
@@ -1228,6 +1258,12 @@ window.addEventListener('DOMContentLoaded', () => {
       juego.style.display  = 'none';
     }
   })
-  pausa.style.display  = 'none';
+  
   _APP = new ZombieGameLevel1()
+
+  pausa.style.display  = 'none'
+  gameover.style.display  = 'none'
+  configuracion.style.display  = 'none'
+
+  return _APP
 })

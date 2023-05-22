@@ -74,6 +74,7 @@ export const player_input = (() => {
       }
     }
 
+
     _onKeyDown(event) {
       switch (event.keyCode) {
         case 87: // w

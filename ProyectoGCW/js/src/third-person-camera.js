@@ -8,7 +8,7 @@ export const third_person_camera = (() => {
 
       this._params = params
       this._camera = params.camera
-
+      this._params.camera._listener = new THREE.AudioListener();
       this._currentPosition = new THREE.Vector3()
       this._currentLookat = new THREE.Vector3()
     }

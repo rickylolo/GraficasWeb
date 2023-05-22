@@ -17,9 +17,12 @@ export const attack_controller = (() => {
       this._RegisterHandler('player.action', (m) => {
         this._OnAnimAction(m)
       })
+
+
     }
 
     _OnAnimAction(m) {
+
       if (m.action != this._action) {
         this._action = m.action
         this._timeElapsed = 0.0
