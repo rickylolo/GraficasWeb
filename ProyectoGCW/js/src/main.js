@@ -551,7 +551,7 @@ class ZombieGameLevel1 {
     )
     this._entityManager.Add(camera, 'player-camera')
 
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 20; ++i) {
       const monsters = [
         {
           resourceName: 'Zombie.fbx'
@@ -1185,8 +1185,49 @@ class ZombieGameLevel1 {
   }
 }
 
+
+
 let _APP = null
+let isPausado = false
 
 window.addEventListener('DOMContentLoaded', () => {
+
+
+  var buttonPause = document.getElementById('icon-bar-pause');
+  var buttonVolver = document.getElementById('volverJuego');
+
+  var pausa = document.getElementById('pauseMenu');
+  var juego = document.getElementById('container');
+
+  
+
+  buttonPause.addEventListener('click', function() {
+    isPausado = !isPausado
+
+    if(!isPausado){
+      pausa.style.display  = 'none';
+      juego.style.display  = 'block';
+    }
+    else{
+      pausa.style.display  = 'block';
+      juego.style.display  = 'none';
+    }
+  })
+
+  
+  buttonVolver.addEventListener('click', function() {
+    isPausado = !isPausado
+
+
+    if(!isPausado){
+      pausa.style.display  = 'none';
+      juego.style.display  = 'block';
+    }
+    else{
+      pausa.style.display  = 'block';
+      juego.style.display  = 'none';
+    }
+  })
+  pausa.style.display  = 'none';
   _APP = new ZombieGameLevel1()
 })

@@ -46,6 +46,8 @@ export const player_entity = (() => {
       this._velocity = new THREE.Vector3(0, 0, 0)
       this._position = new THREE.Vector3()
 
+      this._Score = 0
+
       this._animations = {}
       this._stateMachine = new CharacterFSM(
         new BasicCharacterControllerProxy(this._animations)
