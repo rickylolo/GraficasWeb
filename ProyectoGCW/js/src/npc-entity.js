@@ -86,6 +86,11 @@ export const npc_entity = (() => {
       Zombies = Zombies - 1
       document.getElementById('misPuntosObtenidos').innerText = 'Puntos:'+Score;
       document.getElementById('stats-zombies-killed').innerText = Zombies;
+      if(Zombies <= 27){
+        alert("Completaste el nivel, Puntación:" + Score)
+        // HACER LLAMADA AL SERVIDOR Y REGISTRAR PUNTUACION JUGADOR
+        window.location.href = "inicio.html"
+      }
     }
 
     _OnPosition(m) {
