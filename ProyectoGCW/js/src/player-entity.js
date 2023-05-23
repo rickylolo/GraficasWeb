@@ -64,6 +64,7 @@ export const player_entity = (() => {
 
     _OnDeath(msg) {
       this._stateMachine.SetState('death')
+
     }
 
     _LoadModels() {

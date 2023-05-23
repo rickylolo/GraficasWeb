@@ -7,12 +7,15 @@ import { entity } from './entity.js'
 import { player_entity } from './player-entity.js'
 import { player_state } from './player-state.js'
 
-
 export const npc_entity = (() => {
+  
+  let Score = 0
+  let Zombies = 30
   class AIInput {
     constructor() {
       this._Init()
     }
+
 
     _Init() {
       this._keys = {
@@ -23,6 +26,8 @@ export const npc_entity = (() => {
         space: false,
         shift: false,
       }
+
+      
     }
   }
 
@@ -62,6 +67,7 @@ export const npc_entity = (() => {
         new player_entity.BasicCharacterControllerProxy(this._animations)
       )
 
+   
       this._LoadModels()
     }
 
@@ -76,6 +82,10 @@ export const npc_entity = (() => {
 
     _OnDeath(msg) {
       this._stateMachine.SetState('death')
+      Score = Score +300 
+      Zombies = Zombies - 1
+      document.getElementById('misPuntosObtenidos').innerText = 'Puntos:'+Score;
+      document.getElementById('stats-zombies-killed').innerText = Zombies;
     }
 
     _OnPosition(m) {

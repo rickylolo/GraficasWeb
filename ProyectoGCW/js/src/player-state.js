@@ -59,8 +59,8 @@ export const player_state = (() => {
       return 'attack'
     }
 
-    Enter(prevState) {
-      _ShootSound()
+    Enter(prevState) {     
+   
       this._action = this._parent._proxy._animations['attack'].action
       const mixer = this._action.getMixer()
       mixer.addEventListener('finished', this._FinishedCallback)
@@ -102,16 +102,7 @@ export const player_state = (() => {
     Update(_) {}
   }
 
-  function _ShootSound(){
-    let _listener = new THREE.AudioListener();
-    const sound = new THREE.Audio(_listener);
-    const loader = new THREE.AudioLoader()
-    loader.load('js/resources/sounds/gunshot.mp3', (buffer) => {
-      sound.setBuffer(buffer);
-      sound.setVolume(0.2);
-      sound.play()
-    })
-  }
+
   class WalkState extends State {
     constructor(parent) {
       super(parent)

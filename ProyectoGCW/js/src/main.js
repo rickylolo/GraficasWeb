@@ -1212,7 +1212,8 @@ window.addEventListener('DOMContentLoaded', () => {
   var buttonPause = document.getElementById('icon-bar-pause');
   var buttonVolver = document.getElementById('volverJuego');
   var buttonInicio = document.getElementById('regresarInicio');
-  var buttonConfiguracion = document.getElementById('verConfiguracion');volverPausaFromConfiguracion
+  var buttonConfiguracion = document.getElementById('verConfiguracion');
+  var buttonvolverPausa = document.getElementById('volverPausaFromConfiguracion');
 
   var pausa = document.getElementById('pauseMenu');
   var juego = document.getElementById('container');
@@ -1223,6 +1224,12 @@ window.addEventListener('DOMContentLoaded', () => {
   
   buttonInicio.addEventListener('click', function() {
     window.location.href = "inicio.html";
+})
+
+ 
+buttonvolverPausa.addEventListener('click', function() {
+  configuracion.style.display  = 'none';
+  pausa.style.display  = 'block';
 })
 
 buttonConfiguracion.addEventListener('click', function() {

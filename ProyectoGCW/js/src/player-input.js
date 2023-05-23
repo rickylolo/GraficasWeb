@@ -91,6 +91,10 @@ export const player_input = (() => {
           break
         case 32: // SPACE
           this._keys.space = true
+
+            _ShootSound()
+
+        
           break
         case 16: // SHIFT
           this._keys.shift = true
@@ -121,7 +125,16 @@ export const player_input = (() => {
       }
     }
   }
-
+  function _ShootSound(){
+    let _listener = new THREE.AudioListener();
+    const sound = new THREE.Audio(_listener);
+    const loader = new THREE.AudioLoader()
+    loader.load('js/resources/sounds/gunshot.mp3', (buffer) => {
+        sound.setBuffer(buffer);
+        sound.setVolume(0.15);
+        sound.play()
+    })
+  }
   return {
     BasicCharacterControllerInput: BasicCharacterControllerInput,
     PickableComponent: PickableComponent,

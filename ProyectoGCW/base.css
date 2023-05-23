@@ -40,13 +40,13 @@ body {
 }
 
 .quest-title {
-  font-size: 3em;
+  font-size: 1.5em;
   color: white;
   text-shadow: 4px 4px black;
 }
 
 .quest-text-title {
-  font-size: 3em;
+  font-size: 2em;
   color: white;
   padding-bottom: 10px;
 }
@@ -67,11 +67,11 @@ body {
   display: flex;
   flex-direction: column;
   background: rgba(1, 1, 1, 0.75);
-  margin: 30px;
+  margin: 5rem;
   padding: 20px 20px;
   padding-top: 5px;
   width: 300px;
-  height: 600px;
+  height: 450px;
   z-index: 1;
 }
 
@@ -108,16 +108,17 @@ body {
 
 
 .health-bar {
-  background: greenyellow;
+  position:relative;
+  background: rgb(34, 165, 1);
   width: 200px;
+
+  left: 45%;
+  top: 2rem;
   max-width: 200px;
   height: 40px;
-  position: relative;
-  top: 15px;
-  left: 15px;
   border-style: solid;
   border-width: 2px;
-  border-color: black;
+  border-color: rgb(253, 253, 253);
   border-radius: 5px;
 }
 
@@ -148,7 +149,8 @@ body {
 }
 
 .stats-title {
-  font-size: 3em;
+  font-size: 1.8em;
+  padding-left: 3rem;
   color: white;
   text-shadow: 4px 4px black;
 }
@@ -157,7 +159,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin: 30px;
+  margin: 7rem;
   z-index: 1;
 }
 
@@ -174,13 +176,13 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 2em;
+  font-size: 1.5em;
   color: white;
   text-shadow: 4px 4px black;
 }
 
 .inventory-title {
-  font-size: 3em;
+  font-size: 1.5em;
   color: white;
   text-shadow: 4px 4px black;
 }
@@ -189,7 +191,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin: 30px;
+  margin: 7rem;
   z-index: 1;
 }
 

@@ -33,16 +33,15 @@ export const health_component = (() => {
       bar.style.width = Math.floor(200 * healthAsPercentage) + 'px';
 
       document.getElementById('stats-strength').innerText = this._params.strength;
-      document.getElementById('stats-wisdomness').innerText = this._params.wisdomness;
-      document.getElementById('stats-benchpress').innerText = this._params.benchpress;
-      document.getElementById('stats-curl').innerText = this._params.curl;
       document.getElementById('stats-experience').innerText = this._params.experience;
     }
 
     _ComputeLevelXPRequirement() {
       const level = this._params.level;
-      // Blah just something easy
-      const xpRequired = Math.round(2 ** (level - 1) * 100);
+      
+      
+      const xpRequired = Math.round(2 ** (level - 1) * 150);
+      document.getElementById('stats-experience-next').innerText = xpRequired;
       return xpRequired;
     }
 
